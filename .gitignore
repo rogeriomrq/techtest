@@ -1,0 +1,5 @@
+/api/storage/logs/*
+/api/vendor/
+/web/node_modules/*
+/.idea/*
+/api/docker/mysql-data/*

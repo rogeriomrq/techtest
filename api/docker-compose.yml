@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: ./
+      dockerfile: docker/Dockerfile
+    image: backend-laravel
+    container_name: backend-rest
+    tty: true
+    entrypoint: ./docker/entrypoint.sh
+    volumes:
+      - .:/var/www
+    depends_on:
+      - mysql
+    networks:
+      - app-network
+
+  mysql:
+    image: mysql:8.0
+    container_name: meu_mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: senha_root
+      MYSQL_DATABASE: kanastra
+      MYSQL_USER: kanastra_user
+      MYSQL_PASSWORD: kanastra_password
+    ports:
+      - "3306:3306"
+    networks:
+      - app-network
+    volumes:
+      - ./docker/mysql-data:/var/lib/mysql
+
+  nginx:
+    build: docker/nginx
+    image: servidor-nginx
+    container_name: servidor-nginx
+    restart: always
+    tty: true
+    depends_on:
+      - app
+    ports:
+      - "8080:80"
+    volumes:
+      - .:/var/www
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  mysql-data:
+    driver: bridge

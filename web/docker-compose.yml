@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  react-app:
+    build:
+      context: ./
+      dockerfile: ./docker/Dockerfile
+    image: frontend-react
+    container_name: frontend-react
+    volumes:
+      - .:/var/www
+    ports:
+      - "8888:8888"
+    tty: true

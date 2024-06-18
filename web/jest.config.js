@@ -32,5 +32,6 @@ module.exports = {
     '^@/services(.*)$': '<rootDir>/src/services$1',
     '^@/lib/utils(.*)$': '<rootDir>/src/lib/utils$1',
     '^@/hooks(.*)$': '<rootDir>/src/hooks$1',
+    '^@/App.tsx$': '<rootDir>/src/App.tsx',
   },
 };

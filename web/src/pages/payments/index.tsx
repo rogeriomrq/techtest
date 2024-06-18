@@ -19,9 +19,10 @@ export default function ListPayments() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [selectedFile, setSelectedFile] = useState<File>();
-  const handleFileChange = (event: any) => {
-    const {target: { files },} = event;
-    files?.length && setSelectedFile(files);
+  const [loadingUpload, setLoadingUpload] = useState(false);
+
+  const handleFileChange = (files: any) => {
+    setSelectedFile(files[0]);
   };
 
   const paginate = useCallback((page: number) => {
@@ -36,31 +37,44 @@ export default function ListPayments() {
   },[]);
 
   const handleUploadFile = () => {
-    const formData = new FormData();
-    if (selectedFile) {
-      formData.append('file', selectedFile);
+    if (!selectedFile) {
+      console.error('Nenhum arquivo selecionado para upload.');
+      return;
     }
+
+    const formData = new FormData();
+    formData.append('file', selectedFile);
+
     const config = {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
     };
+
+    setLoadingUpload(true);
+
     api.post('upload/payments', formData, config)
       .then(() => {
         paginate(1);
         alert('upload feito com sucesso');
+        setLoadingUpload(false);
+      })
+      .catch(error => {
+        console.error('Erro ao fazer upload do arquivo:', error);
+        setLoadingUpload(false);
+        alert('Erro ao fazer upload do arquivo.');
       });
   }
 
   useEffect(() => {
       paginate(currentPage);
-  }, [currentPage]);
+  }, [currentPage, paginate]);
 
   let listCollumn = [
     {name: 'name', label: 'Nome'},
     {name: 'email', label: 'E-mail'},
     {name: 'governmentId', label: 'Government Id'},
-    {name: 'debtAmount', label: 'Valor da dívida'},
+    {name: 'debtAmount', label: 'Valor da dívida', prefix: 'R$ '},
     {name: 'debtDueDate', label: 'Data de vencimento da dívida'},
     {name: 'debtId', label: 'Id dívida'},
   ];
@@ -69,9 +83,10 @@ export default function ListPayments() {
     <>
       <div className="p-6 flex flex-col gap-4 bg-white shadow-md rounded-lg">
         <Components.FileUploader
-          file={selectedFile as File}
+          file={selectedFile}
           handleFile={handleFileChange}
           handleUpload={handleUploadFile}
+          loadingUpload={loadingUpload}
         />
         <DefaultTable
           titulo={'Lista de débitos'}

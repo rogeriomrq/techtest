@@ -1,4 +1,3 @@
-import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import * as Components from './components';
 import ListPayments from "@/pages/payments";

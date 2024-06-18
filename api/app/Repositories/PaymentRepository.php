@@ -14,7 +14,6 @@ class PaymentRepository implements PaymentRepositoryInterface
     }
     public function insertBatch(array $data)
     {
-        dd($data);
         $this->model->insert($data);
     }
 

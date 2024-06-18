@@ -15,6 +15,7 @@ Route::post('/upload/payments', [PaymentController::class, 'processFile']);
 Route::prefix('payments')->group(function () {
     Route::get('/', [PaymentController::class, 'index']);
 });
+
 Route::group(['middleware' => ['auth:sanctum']], static function () {
     Route::post('logout', [AuthController::class, 'logout']);
 });

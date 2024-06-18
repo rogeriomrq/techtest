@@ -1,6 +1,10 @@
-0.0.0.1
+0.0.1.0
 - Configuração de ambiente frontend
 - Configuração de ambiente backend
 - Configuração do docker
 - Configuração do banco
 - Estrutura inicial de front e backend
+
+0.0.1.1
+- Melhoria visual no upload do arquivo.
+- Complementação de informação no README.md

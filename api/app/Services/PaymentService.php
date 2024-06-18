@@ -81,6 +81,6 @@ class PaymentService implements PaymentServiceInterface
 
     public function getPayments($page)
     {
-        return $this->paymentRepository->getPaginatedPayments(10, $page);
+        return $this->paymentRepository->getPaginatedPayments(7, $page);
     }
 }

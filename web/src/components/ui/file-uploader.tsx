@@ -1,13 +1,20 @@
 import React from "react";
 
 type FileUploaderProps = {
-  file: File;
-  handleFile: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  file: File | undefined;
+  handleFile: (Files: FileList) => void;
   handleUpload: () => void;
+  loadingUpload?: boolean
 }
-const FileUploader = ({ file, handleFile, handleUpload }: FileUploaderProps) => {
+const FileUploader = ({ file, handleFile, handleUpload, loadingUpload = false }: FileUploaderProps) => {
+
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    handleFile(event);
+    const { files } = event.target;
+    if (files != undefined && files.length>0) {
+      handleFile(files);
+    } else {
+      console.log('Erro ao adicionar o arquivo.');
+    }
   };
   const handleClickUpload = () => {
     handleUpload();
@@ -32,7 +39,19 @@ const FileUploader = ({ file, handleFile, handleUpload }: FileUploaderProps) => 
         </section>
       )}
 
-      {file && <button className="rounded-lg bg-green-800 text-white px-4 py-2 border-none font-semibold" onClick={handleClickUpload}>Upload the file</button>}
+      {file && !loadingUpload && (
+        <button className="rounded-lg bg-green-800 text-white px-4 py-2 border-none font-semibold" onClick={handleClickUpload}>
+          Upload the file
+        </button>
+      )}
+
+      {file && loadingUpload && (
+        <button className="flex items-center justify-center rounded-lg bg-green-300 text-white px-4 py-2 border-none font-semibold">
+          <span className="mr-2">Uploading...</span>
+          <div className="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-6 w-6"></div>
+        </button>
+      )}
+
     </div>
   );
 };

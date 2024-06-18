@@ -4,10 +4,12 @@ import * as Components from '@/components';
 
 export interface ITableColumnProps {
   name: string,
-  label: string
+  label: string,
+  prefix?: string,
 }
+
 interface ITableDefaultProps {
-  titulo: string;
+  titulo?: string;
   data: (object | number | string)[];
   columns: ITableColumnProps[];
   pagination: {currentPage: number, totalPages: number, onPageChange: (currentPage: number) => void};
@@ -23,7 +25,9 @@ function DefaultTableComponent({
   return (
     <>
       <Components.Table>
-          <Components.TableCaption className={cn('text-left text-lg font-bold w-max-content')}>{titulo}</Components.TableCaption>
+          {titulo && (
+            <Components.TableCaption className={cn('text-left text-lg font-bold w-max-content mb-4')}>{titulo}</Components.TableCaption>
+          )}
           <Components.TableHeader>
             <Components.TableRow>
               {columns.map((column) =>
@@ -37,7 +41,7 @@ function DefaultTableComponent({
                 <Components.TableRow key={index}>
                   {columns.map((column, colIndex) => (
                     <Components.TableCell key={colIndex}>
-                      {column.name === 'debtAmount' ? `R$ ${payment[column.name]}` : payment[column.name]}
+                      {(column.prefix ?? '') + payment[column.name]}
                     </Components.TableCell>
                   ))}
                 </Components.TableRow>
